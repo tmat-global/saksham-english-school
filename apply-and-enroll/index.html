@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Apply &amp; Enroll | Saksham English School</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --navy:#1B2A4A;--navy2:#223060;--blue:#2B4590;
+  --red:#C0392B;--red2:#E74C3C;--white:#FFFFFF;
+  --teal:#1A6B6B;--teal2:#0D5C5C;
+  --lightgray:#F2F2F2;--text:#222222;--muted:#555555;
+}
+html{scroll-behavior:smooth;}
+body{font-family:'Open Sans',sans-serif;background:var(--white);color:var(--text);overflow-x:hidden;}
+a{text-decoration:none;color:inherit;}
+img{max-width:100%;}
+
+/* NAVBAR */
+#navbar{
+  position:fixed;top:0;left:0;right:0;z-index:1000;
+  background:var(--white);box-shadow:0 2px 8px rgba(0,0,0,0.1);
+  height:70px;display:flex;align-items:center;
+  padding:0 40px;justify-content:space-between;
+}
+.nav-logo{display:flex;align-items:center;gap:10px;}
+.nav-logo-circle{width:52px;height:52px;border-radius:50%;background:var(--navy);display:flex;align-items:center;justify-content:center;flex-direction:column;border:2px solid var(--blue);flex-shrink:0;}
+.nav-logo-circle span{font-family:'Oswald',sans-serif;font-size:13px;font-weight:700;color:var(--white);line-height:1;letter-spacing:1px;}
+.nav-logo-circle small{font-size:6px;color:#aac4ff;letter-spacing:0.5px;}
+.nav-logo-img{width:52px;height:52px;object-fit:contain;display:none;border-radius:50%;}
+.nav-logo-img.loaded{display:block;}
+.nav-logo-img.loaded ~ .nav-logo-circle{display:none;}
+.nav-logo-text strong{font-family:'Oswald',sans-serif;font-size:15px;font-weight:600;color:var(--navy);display:block;letter-spacing:0.5px;}
+.nav-logo-text small{font-size:10px;color:var(--muted);letter-spacing:0.5px;}
+.nav-links{display:flex;align-items:center;}
+.nav-links a{font-family:'Open Sans',sans-serif;font-size:13px;font-weight:600;color:var(--navy);padding:0 14px;border-right:1px solid #ddd;transition:color 0.2s;white-space:nowrap;}
+.nav-links a:last-child{border-right:none;}
+.nav-links a:hover,.nav-links a.active{color:var(--red);}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;}
+.hamburger span{width:24px;height:2px;background:var(--navy);border-radius:2px;transition:0.3s;}
+.mobile-menu{display:none;position:fixed;top:70px;left:0;right:0;background:var(--white);border-top:2px solid var(--red);flex-direction:column;z-index:999;box-shadow:0 4px 12px rgba(0,0,0,0.1);}
+.mobile-menu.open{display:flex;}
+.mobile-menu a{font-size:14px;font-weight:600;color:var(--navy);padding:14px 24px;border-bottom:1px solid #eee;transition:0.2s;}
+.mobile-menu a:hover{background:var(--lightgray);color:var(--red);}
+
+/* HERO BANNER */
+.page-hero{margin-top:70px;width:100%;height:240px;position:relative;overflow:hidden;background:var(--navy2);}
+.page-hero img{width:100%;height:100%;object-fit:cover;filter:brightness(0.55);}
+.page-hero-fallback{position:absolute;inset:0;background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 100%);display:none;}
+.page-hero-text{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;}
+.page-hero-text h1{font-family:'Oswald',sans-serif;font-size:clamp(24px,4vw,44px);font-weight:700;color:var(--white);letter-spacing:3px;text-transform:uppercase;text-shadow:0 2px 10px rgba(0,0,0,0.5);}
+
+/* MAIN CONTENT */
+.apply-main{display:grid;grid-template-columns:1fr 380px;gap:0;padding:52px 56px;align-items:start;}
+
+/* LEFT — POLICY TEXT */
+.policy-text{padding-right:48px;}
+.policy-text p{font-size:12.5px;color:var(--muted);line-height:1.85;margin-bottom:24px;}
+.policy-block{margin-bottom:24px;}
+.policy-block h3{font-size:13px;font-weight:700;color:var(--text);margin-bottom:10px;letter-spacing:0.3px;}
+.policy-block ol{padding-left:18px;display:grid;gap:6px;}
+.policy-block ol li{font-size:12px;color:var(--muted);line-height:1.7;}
+
+/* RIGHT — ADMISSION FORM CARD */
+.admission-card{background:var(--teal);border-radius:4px;overflow:hidden;padding:28px 24px 32px;position:sticky;top:90px;}
+.admission-card h3{font-family:'Oswald',sans-serif;font-size:20px;font-weight:600;color:var(--white);text-align:center;margin-bottom:22px;letter-spacing:0.5px;}
+.form-field{margin-bottom:14px;}
+.form-field label{font-size:11px;font-weight:600;color:rgba(255,255,255,0.75);letter-spacing:0.4px;display:block;margin-bottom:5px;}
+.form-field label .req{color:#ff9a9a;}
+.form-field input,.form-field select{width:100%;padding:9px 12px;border:1px solid rgba(255,255,255,0.3);border-radius:3px;font-size:13px;font-family:'Open Sans',sans-serif;background:rgba(255,255,255,0.12);color:var(--white);outline:none;transition:border 0.2s;}
+.form-field input::placeholder{color:rgba(255,255,255,0.4);}
+.form-field input:focus,.form-field select:focus{border-color:rgba(255,255,255,0.7);}
+.form-field select option{background:var(--teal2);color:var(--white);}
+.name-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+.send-btn{width:100%;background:var(--red);color:var(--white);border:none;padding:12px;font-family:'Oswald',sans-serif;font-size:15px;font-weight:600;letter-spacing:1.5px;cursor:pointer;border-radius:3px;margin-top:6px;transition:background 0.2s;text-transform:uppercase;display:flex;align-items:center;justify-content:center;gap:8px;}
+.send-btn:hover{background:var(--red2);}
+.send-btn svg{width:18px;height:18px;stroke:var(--white);fill:none;stroke-width:2;}
+.form-terms{font-size:10.5px;color:rgba(255,255,255,0.6);text-align:center;margin-top:10px;line-height:1.5;}
+.form-success-apply{display:none;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:3px;padding:14px;color:var(--white);font-size:13px;text-align:center;margin-top:14px;}
+
+/* THREE BANNER STRIP */
+.cta-strip{display:grid;grid-template-columns:1fr 1fr 1fr;height:80px;}
+.cta-item{display:flex;align-items:center;justify-content:center;cursor:pointer;transition:opacity 0.2s;}
+.cta-item:hover{opacity:0.88;}
+.cta-item h4{font-family:'Oswald',sans-serif;font-size:18px;font-weight:700;color:var(--white);letter-spacing:2px;text-transform:uppercase;}
+.cta-blue{background:#2980B9;}
+.cta-teal{background:var(--teal2);}
+.cta-red{background:var(--red);}
+
+/* FOOTER TOP */
+.footer-top{display:grid;grid-template-columns:1fr 1fr;background:var(--white);}
+.footer-brand{padding:40px 52px;border-right:1px solid #eee;}
+.footer-logo-wrap{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.footer-logo-circle{width:44px;height:44px;border-radius:50%;background:var(--navy);display:flex;align-items:center;justify-content:center;flex-direction:column;border:2px solid var(--blue);}
+.footer-logo-circle span{font-family:'Oswald',sans-serif;font-size:11px;font-weight:700;color:var(--white);line-height:1;}
+.footer-logo-circle small{font-size:5px;color:#aac4ff;}
+.footer-brand-name{font-family:'Oswald',sans-serif;font-size:14px;font-weight:600;color:var(--navy);}
+.footer-brand-sub{font-size:10px;color:var(--muted);}
+.footer-tagline{font-size:12px;color:var(--muted);line-height:1.8;font-style:italic;max-width:320px;}
+.footer-touch{padding:40px 52px;}
+.footer-touch h4{font-family:'Oswald',sans-serif;font-size:18px;font-weight:600;color:var(--navy);margin-bottom:20px;}
+.footer-form{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.footer-form input{padding:10px 12px;border:1px solid #ddd;border-radius:3px;font-size:13px;font-family:'Open Sans',sans-serif;outline:none;transition:border 0.2s;}
+.footer-form input:focus{border-color:var(--blue);}
+.footer-form .send-row{grid-column:1/-1;text-align:right;}
+.footer-form .send-row button{background:var(--red);color:var(--white);border:none;padding:10px 28px;border-radius:3px;font-family:'Oswald',sans-serif;font-size:14px;font-weight:600;letter-spacing:1px;cursor:pointer;transition:background 0.2s;text-transform:uppercase;}
+.footer-form .send-row button:hover{background:var(--red2);}
+.form-ok{display:none;color:green;font-size:13px;margin-top:8px;}
+
+/* FOOTER */
+footer{background:#E8EDF2;padding:32px 40px 0;}
+.footer-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:28px;padding-bottom:24px;}
+.footer-col h5{font-family:'Oswald',sans-serif;font-size:13px;font-weight:600;color:var(--navy);letter-spacing:0.5px;margin-bottom:12px;text-transform:uppercase;}
+.footer-col ul{list-style:none;display:grid;gap:5px;}
+.footer-col ul li a{font-size:11px;color:var(--muted);transition:color 0.2s;}
+.footer-col ul li a:hover{color:var(--red);}
+.footer-col p{font-size:12px;color:var(--muted);line-height:1.7;}
+.footer-col a.flink{font-size:12px;color:var(--blue);display:block;margin-bottom:3px;}
+.footer-col a.flink:hover{color:var(--red);}
+
+/* ── REAL SOCIAL ICONS ── */
+.footer-social{display:flex;gap:10px;margin-top:14px;}
+.footer-social a{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:transform 0.22s ease,opacity 0.22s ease;flex-shrink:0;}
+.footer-social a:hover{transform:scale(1.15) translateY(-2px);}
+.footer-social a svg{width:18px;height:18px;fill:#fff;display:block;}
+.social-instagram{background:radial-gradient(circle at 30% 107%,#fdf497 0%,#fdf497 5%,#fd5949 45%,#d6249f 60%,#285AEB 90%);}
+.social-facebook{background:#1877F2;}
+.social-linkedin{background:#0A66C2;}
+
+.footer-bar{border-top:1px solid #ccc;padding:14px 0;text-align:center;font-size:11px;color:var(--muted);}
+
+/* RESPONSIVE */
+@media(max-width:960px){
+  .apply-main{grid-template-columns:1fr;padding:36px 28px;}
+  .policy-text{padding-right:0;margin-bottom:32px;}
+  .admission-card{position:static;}
+  .cta-strip{height:auto;grid-template-columns:1fr;}
+  .cta-item{padding:22px;}
+}
+@media(max-width:768px){
+  #navbar{padding:0 16px;}
+  .nav-links{display:none;}
+  .hamburger{display:flex;}
+  .footer-top{grid-template-columns:1fr;}
+  .footer-brand,.footer-touch{padding:24px 20px;}
+  footer{padding:20px 20px 0;}
+  .footer-grid{grid-template-columns:1fr 1fr;}
+  .apply-main{padding:28px 20px;}
+}
+@media(max-width:480px){
+  .footer-grid{grid-template-columns:1fr;}
+  .footer-form{grid-template-columns:1fr;}
+  .name-row{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <a href="/" class="nav-logo">
+    <img class="nav-logo-img" src="../assets/images/logo.png" alt="Logo" onload="this.classList.add('loaded')">
+    <div class="nav-logo-circle"><span>SES</span><small>RENAPUR</small></div>
+    <div class="nav-logo-text">
+      <strong>Saksham English School</strong>
+      <small>Renapur, Latur — State Board</small>
+    </div>
+  </a>
+  <div class="nav-links">
+    <a href="/">Home</a>
+    <a href="/gallery">Gallery</a>
+    <a href="/management">Management</a>
+    <a href="/apply-and-enroll" class="active">Apply &amp; Enroll</a>
+    <a href="/campus-life">Campus Life</a>
+    <a href="/why-us">Why us</a>
+    <a href="/contact">Contact</a>
+  </div>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="/">Home</a>
+  <a href="/gallery">Gallery</a>
+  <a href="/management">Management</a>
+  <a href="/apply-and-enroll">Apply &amp; Enroll</a>
+  <a href="/campus-life">Campus Life</a>
+  <a href="/why-us">Why us</a>
+  <a href="/contact">Contact</a>
+</div>
+
+<!-- HERO BANNER -->
+<div class="page-hero">
+  <img src="../assets/images/apply-banner.jpg" alt="Admissions"
+    onerror="this.style.display='none';document.querySelector('.page-hero-fallback').style.display='block'">
+  <div class="page-hero-fallback"></div>
+  <div class="page-hero-text"><h1>Admissions Policy 2025-26</h1></div>
+</div>
+
+<!-- MAIN: LEFT POLICY + RIGHT FORM -->
+<div class="apply-main">
+  <div class="policy-text">
+    <p>Admission to Saksham English School is open to students who demonstrate the ability to access and benefit from the quality education and programs offered by the school.</p>
+    <div class="policy-block">
+      <h3>Criteria for Admission</h3>
+      <ol>
+        <li>Availability of seats in appropriate classes and programs</li>
+        <li>Meeting all admission procedures and qualifications</li>
+        <li>Meeting all financial obligations</li>
+        <li>Saksham English School will accept students from Early Years</li>
+        <li>Parents will be invited for an interview with the Admissions Committee</li>
+        <li>Final decision to be made by Principal</li>
+      </ol>
+    </div>
+    <div class="policy-block">
+      <h3>Documents Required for Admission</h3>
+      <ol>
+        <li>The Application Form should be completed, signed, and submitted along with the following documentation</li>
+        <li>2 passport size photographs</li>
+        <li>Copy of Birth Certificate</li>
+        <li>Previous School Leaving Certificate / Transfer Certificate</li>
+        <li>For Foreigners: Copy of Passport with valid student visa</li>
+        <li>For Indians: Copy of the Aadhaar Card</li>
+        <li>Copy of the final performance report (previous 2 years if applicable)</li>
+        <li>Parents identification, which matches the information provided on the Application Form</li>
+      </ol>
+    </div>
+  </div>
+
+  <div class="admission-card">
+    <h3>School Admission Form</h3>
+    <div class="form-field">
+      <label>Student's Name <span class="req">*</span></label>
+      <div class="name-row">
+        <input type="text" placeholder="First">
+        <input type="text" placeholder="Last">
+      </div>
+    </div>
+    <div class="form-field">
+      <label>Class you want to apply for <span class="req">*</span></label>
+      <select>
+        <option value="">Select Class</option>
+        <option>Class 1</option><option>Class 2</option><option>Class 3</option>
+        <option>Class 4</option><option>Class 5</option><option>Class 6</option>
+        <option>Class 7</option><option>Class 8</option><option>Class 9</option>
+      </select>
+    </div>
+    <div class="form-field">
+      <label>Student's Date of Birth <span class="req">*</span></label>
+      <input type="date">
+    </div>
+    <div class="form-field">
+      <label>Parent / Guardian Name <span class="req">*</span></label>
+      <div class="name-row">
+        <input type="text" placeholder="First">
+        <input type="text" placeholder="Last">
+      </div>
+    </div>
+    <div class="form-field">
+      <label>Current Address</label>
+      <input type="text" placeholder="Address">
+    </div>
+    <div class="form-field">
+      <label>Phone</label>
+      <input type="tel" placeholder="000 000 0000">
+    </div>
+    <div class="form-field">
+      <label>Email <span class="req">*</span></label>
+      <small style="font-size:10px;color:rgba(255,255,255,0.5);display:block;margin-bottom:5px;">Your admission confirmation will be sent via email.</small>
+      <input type="email" placeholder="Email address">
+    </div>
+    <button class="send-btn" onclick="submitApplication()">
+      Send Application
+      <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+    </button>
+    <div class="form-terms">I accept the terms and conditions specified in the Admission Policy and confirm that details furnished above are true and correct.</div>
+    <div class="form-success-apply" id="applySuccess">Thank you! Your application has been submitted successfully. We will contact you soon.</div>
+  </div>
+</div>
+
+<!-- THREE CTA STRIP -->
+<div class="cta-strip">
+  <div class="cta-item cta-blue" onclick="document.querySelector('.admission-card').scrollIntoView({behavior:'smooth'})"><h4>Apply Here</h4></div>
+  <div class="cta-item cta-teal"><h4>My Application</h4></div>
+  <div class="cta-item cta-red" onclick="document.querySelector('.admission-card').scrollIntoView({behavior:'smooth'})"><h4>Register for Classes</h4></div>
+</div>
+
+<!-- FOOTER TOP -->
+<div class="footer-top">
+  <div class="footer-brand">
+    <div class="footer-logo-wrap">
+      <div class="footer-logo-circle"><span>SES</span><small>RNP</small></div>
+      <div>
+        <div class="footer-brand-name">Saksham English School</div>
+        <div class="footer-brand-sub">Renapur, Latur</div>
+      </div>
+    </div>
+    <p class="footer-tagline">Education is not only to create an environment which helps students learn but also inspires them to recognise and explore their own potential.</p>
+  </div>
+  <div class="footer-touch">
+    <h4>Get in Touch</h4>
+    <div class="footer-form">
+      <input type="text" placeholder="First Name">
+      <input type="text" placeholder="Last Name">
+      <input type="email" placeholder="Email">
+      <input type="tel" placeholder="Phone">
+      <div class="send-row"><button onclick="sendForm()">Send</button></div>
+    </div>
+    <div class="form-ok" id="formOk">Thank you! We will get back to you soon.</div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-col">
+      <h5>Quick Links</h5>
+      <ul>
+        <li><a href="../assets/docs/academic-calendar.pdf" target="_blank">Academic Calendar</a></li>
+        <li><a href="../assets/docs/fee-structure.pdf" target="_blank">Fee Structure 2025-26</a></li>
+        <li><a href="../assets/docs/affiliation.pdf" target="_blank">School Affiliation Letter</a></li>
+        <li><a href="../assets/docs/teacher-details.pdf" target="_blank">Teacher Details</a></li>
+        <li><a href="../assets/docs/result.pdf" target="_blank">3 Years Result</a></li>
+        <li><a href="../assets/docs/building-safety.pdf" target="_blank">Building Safety Certificate</a></li>
+        <li><a href="../assets/docs/pta.pdf" target="_blank">PTA</a></li>
+        <li><a href="../assets/docs/noc.pdf" target="_blank">State Board NOC</a></li>
+        <li><a href="../assets/docs/recognition.pdf" target="_blank">Recognition Certificate</a></li>
+        <li><a href="../assets/docs/balance-sheet.pdf" target="_blank">Balance Sheet</a></li>
+        <li><a href="../assets/docs/income-expenditure.pdf" target="_blank">Income &amp; Expenditure</a></li>
+        <li><a href="../assets/docs/student-list.pdf" target="_blank">Student Name List</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>More Documents</h5>
+      <ul>
+        <li><a href="../assets/docs/land-certificate.pdf" target="_blank">Certificate of Land</a></li>
+        <li><a href="../assets/docs/self-certificate.pdf" target="_blank">Self Certificate of SES</a></li>
+        <li><a href="../assets/docs/admin-staff.pdf" target="_blank">Admin Staff Details</a></li>
+        <li><a href="../assets/docs/fire-safety.pdf" target="_blank">Fire Safety Certificate</a></li>
+        <li><a href="../assets/docs/smc.pdf" target="_blank">SMC Committee</a></li>
+        <li><a href="../assets/docs/registration.pdf" target="_blank">Registration of Society</a></li>
+        <li><a href="../assets/docs/non-proprietary.pdf" target="_blank">Non-Proprietary Certificate</a></li>
+        <li><a href="../assets/docs/doctors-panel.pdf" target="_blank">Doctors Panel</a></li>
+        <li><a href="../assets/docs/drinking-sanitary.pdf" target="_blank">Drinking &amp; Sanitary Certificate</a></li>
+        <li><a href="../assets/docs/lease.pdf" target="_blank">Lease Agreement</a></li>
+        <li><a href="../assets/docs/trustee-list.pdf" target="_blank">List of Trustees</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Registration Office</h5>
+      <p>
+        <a href="mailto:sakshamschoolrenapur@gmail.com" class="flink">sakshamschoolrenapur@gmail.com</a>
+        Tel: +91 [ Contact Number ]<br><br>
+        Rupchand Nagar, Renapur,<br>Maharashtra 413527<br>
+        Beside Renapur Bus Stand
+      </p>
+      <!-- REAL SOCIAL ICONS -->
+      <div class="footer-social">
+        <a href="https://www.instagram.com/" target="_blank" class="social-instagram" title="Instagram">
+          <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        </a>
+        <a href="https://www.facebook.com/" target="_blank" class="social-facebook" title="Facebook">
+          <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        </a>
+        <a href="https://www.linkedin.com/" target="_blank" class="social-linkedin" title="LinkedIn">
+          <svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h5>School Hours</h5>
+      <p>Mon, Fri, Sat: 9:00 AM – 4:00 PM<br><br>Tue, Wed, Thu, Sun: Closed</p>
+      <br>
+      <h5>Navigate</h5>
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/gallery">Gallery</a></li>
+        <li><a href="/management">Management</a></li>
+        <li><a href="/campus-life">Campus Life</a></li>
+        <li><a href="/why-us">Why Us</a></li>
+        <li><a href="/contact">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bar">
+    Rupchand Nagar, Beside Renapur Bus Stand, Renapur, Dist. Latur, MH-413527 &nbsp;|&nbsp; &copy; 2025 By Saksham English School
+  </div>
+</footer>
+
+<script>
+function toggleMenu(){document.getElementById('mobileMenu').classList.toggle('open');}
+window.addEventListener('click',function(e){
+  if(!e.target.closest('#navbar')&&!e.target.closest('#mobileMenu')){document.getElementById('mobileMenu').classList.remove('open');}
+});
+function submitApplication(){
+  const el=document.getElementById('applySuccess');
+  el.style.display='block';
+  setTimeout(()=>{el.style.display='none';},6000);
+}
+function sendForm(){
+  const el=document.getElementById('formOk');
+  el.style.display='block';
+  setTimeout(()=>{el.style.display='none';},5000);
+}
+</script>
+</body>
+</html>

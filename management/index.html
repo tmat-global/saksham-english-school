@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Management | Saksham English School</title>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Open+Sans:wght@300;400;600&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --navy:#1B2A4A;--navy2:#223060;--blue:#2B4590;
+  --red:#C0392B;--red2:#E74C3C;--white:#FFFFFF;
+  --lightgray:#F2F2F2;--text:#222222;--muted:#555555;
+}
+html{scroll-behavior:smooth;}
+body{font-family:'Open Sans',sans-serif;background:var(--white);color:var(--text);overflow-x:hidden;}
+a{text-decoration:none;color:inherit;}
+img{max-width:100%;}
+
+/* NAVBAR */
+#navbar{position:fixed;top:0;left:0;right:0;z-index:1000;background:var(--white);box-shadow:0 2px 8px rgba(0,0,0,0.1);height:70px;display:flex;align-items:center;padding:0 40px;justify-content:space-between;}
+.nav-logo{display:flex;align-items:center;gap:10px;}
+.nav-logo-circle{width:52px;height:52px;border-radius:50%;background:var(--navy);display:flex;align-items:center;justify-content:center;flex-direction:column;border:2px solid var(--blue);flex-shrink:0;}
+.nav-logo-circle span{font-family:'Oswald',sans-serif;font-size:13px;font-weight:700;color:var(--white);line-height:1;letter-spacing:1px;}
+.nav-logo-circle small{font-size:6px;color:#aac4ff;letter-spacing:0.5px;}
+.nav-logo-img{width:52px;height:52px;object-fit:contain;display:none;border-radius:50%;}
+.nav-logo-img.loaded{display:block;}
+.nav-logo-img.loaded ~ .nav-logo-circle{display:none;}
+.nav-logo-text strong{font-family:'Oswald',sans-serif;font-size:15px;font-weight:600;color:var(--navy);display:block;letter-spacing:0.5px;}
+.nav-logo-text small{font-size:10px;color:var(--muted);letter-spacing:0.5px;}
+.nav-links{display:flex;align-items:center;}
+.nav-links a{font-family:'Open Sans',sans-serif;font-size:13px;font-weight:600;color:var(--navy);padding:0 14px;border-right:1px solid #ddd;transition:color 0.2s;white-space:nowrap;}
+.nav-links a:last-child{border-right:none;}
+.nav-links a:hover,.nav-links a.active{color:var(--red);}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;padding:4px;}
+.hamburger span{width:24px;height:2px;background:var(--navy);border-radius:2px;transition:0.3s;}
+.mobile-menu{display:none;position:fixed;top:70px;left:0;right:0;background:var(--white);border-top:2px solid var(--red);flex-direction:column;z-index:999;box-shadow:0 4px 12px rgba(0,0,0,0.1);}
+.mobile-menu.open{display:flex;}
+.mobile-menu a{font-size:14px;font-weight:600;color:var(--navy);padding:14px 24px;border-bottom:1px solid #eee;transition:0.2s;}
+.mobile-menu a:hover{background:var(--lightgray);color:var(--red);}
+
+/* HERO BANNER */
+.page-hero{margin-top:70px;width:100%;height:420px;position:relative;overflow:hidden;background:var(--navy2);}
+.page-hero img{width:100%;height:100%;object-fit:cover;filter:brightness(0.5);}
+.page-hero-fallback{position:absolute;inset:0;background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 100%);display:none;}
+.page-hero-text{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;}
+.page-hero-text h1{font-family:'Oswald',sans-serif;font-size:clamp(36px,6vw,64px);font-weight:600;color:var(--white);letter-spacing:2px;text-shadow:0 2px 12px rgba(0,0,0,0.5);}
+
+/* MANAGEMENT HEADING */
+.mgmt-heading{text-align:center;padding:56px 40px 40px;border-bottom:1px solid #eee;}
+.mgmt-heading h2{font-family:'Oswald',sans-serif;font-size:36px;font-weight:600;color:var(--blue);margin-bottom:10px;letter-spacing:1px;}
+.mgmt-heading .underline{width:40px;height:3px;background:var(--blue);margin:0 auto 20px;border-radius:2px;}
+.mgmt-heading p{font-size:13px;color:var(--muted);max-width:620px;margin:0 auto;line-height:1.8;}
+
+/* STAFF CARDS */
+.staff-section{padding:52px 40px;}
+.staff-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:20px;margin-bottom:20px;}
+.staff-grid.row2{grid-template-columns:repeat(5,1fr);}
+.staff-card{background:var(--white);border:1px solid #e0e0e0;border-radius:4px;overflow:hidden;transition:box-shadow 0.2s;}
+.staff-card:hover{box-shadow:0 6px 20px rgba(0,0,0,0.1);}
+.staff-photo{width:100%;aspect-ratio:3/3.5;overflow:hidden;background:#f0f0f0;position:relative;}
+.staff-photo img{width:100%;height:100%;object-fit:cover;object-position:top;display:block;}
+.staff-photo-placeholder{width:100%;height:100%;display:flex;align-items:center;justify-content:center;background:#f5f5f5;}
+.staff-photo-placeholder svg{width:60%;height:60%;fill:#bbb;}
+.staff-info{padding:16px 14px;}
+.staff-role{font-size:11px;color:var(--blue);font-weight:600;letter-spacing:0.5px;margin-bottom:4px;}
+.staff-name{font-family:'Oswald',sans-serif;font-size:16px;font-weight:600;color:var(--navy);margin-bottom:8px;line-height:1.2;}
+.staff-desc{font-size:11.5px;color:var(--muted);line-height:1.7;}
+
+/* PRINCIPAL MESSAGE */
+.principal-section{display:grid;grid-template-columns:1fr 1fr;min-height:500px;}
+.principal-text{padding:56px 52px;background:var(--white);}
+.principal-text h2{font-family:'Oswald',sans-serif;font-size:30px;font-weight:600;color:var(--navy);margin-bottom:20px;letter-spacing:0.5px;}
+.principal-text blockquote{font-size:13px;color:var(--muted);line-height:1.9;font-style:italic;border-left:3px solid var(--blue);padding-left:16px;margin-bottom:18px;}
+.principal-text p{font-size:12.5px;color:var(--muted);line-height:1.9;margin-bottom:14px;}
+.principal-sign{margin-top:20px;}
+.principal-sign strong{font-family:'Oswald',sans-serif;font-size:16px;font-weight:600;color:var(--blue);display:block;}
+.principal-sign span{font-size:12px;color:var(--muted);}
+.principal-photo{overflow:hidden;background:#dde4f0;}
+.principal-photo img{width:100%;height:100%;object-fit:cover;object-position:top center;}
+.principal-photo-placeholder{width:100%;height:100%;min-height:500px;background:linear-gradient(135deg,#dde4f0,#c8d3e8);display:flex;align-items:center;justify-content:center;}
+.principal-photo-placeholder span{font-size:12px;color:#8a9bb0;letter-spacing:1px;text-transform:uppercase;}
+
+/* FOOTER TOP */
+.footer-top{display:grid;grid-template-columns:1fr 1fr;background:var(--white);}
+.footer-brand{padding:40px 52px;border-right:1px solid #eee;}
+.footer-logo-wrap{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.footer-logo-circle{width:44px;height:44px;border-radius:50%;background:var(--navy);display:flex;align-items:center;justify-content:center;flex-direction:column;border:2px solid var(--blue);}
+.footer-logo-circle span{font-family:'Oswald',sans-serif;font-size:11px;font-weight:700;color:var(--white);line-height:1;}
+.footer-logo-circle small{font-size:5px;color:#aac4ff;}
+.footer-brand-name{font-family:'Oswald',sans-serif;font-size:14px;font-weight:600;color:var(--navy);}
+.footer-brand-sub{font-size:10px;color:var(--muted);}
+.footer-tagline{font-size:12px;color:var(--muted);line-height:1.8;font-style:italic;max-width:320px;}
+.footer-touch{padding:40px 52px;}
+.footer-touch h4{font-family:'Oswald',sans-serif;font-size:18px;font-weight:600;color:var(--navy);margin-bottom:20px;}
+.footer-form{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.footer-form input{padding:10px 12px;border:1px solid #ddd;border-radius:3px;font-size:13px;font-family:'Open Sans',sans-serif;outline:none;transition:border 0.2s;}
+.footer-form input:focus{border-color:var(--blue);}
+.footer-form .send-row{grid-column:1/-1;text-align:right;}
+.footer-form .send-row button{background:var(--red);color:var(--white);border:none;padding:10px 28px;border-radius:3px;font-family:'Oswald',sans-serif;font-size:14px;font-weight:600;letter-spacing:1px;cursor:pointer;transition:background 0.2s;text-transform:uppercase;}
+.footer-form .send-row button:hover{background:var(--red2);}
+.form-ok{display:none;color:green;font-size:13px;margin-top:8px;}
+
+/* FOOTER */
+footer{background:#E8EDF2;padding:32px 40px 0;}
+.footer-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:28px;padding-bottom:24px;}
+.footer-col h5{font-family:'Oswald',sans-serif;font-size:13px;font-weight:600;color:var(--navy);letter-spacing:0.5px;margin-bottom:12px;text-transform:uppercase;}
+.footer-col ul{list-style:none;display:grid;gap:5px;}
+.footer-col ul li a{font-size:11px;color:var(--muted);transition:color 0.2s;}
+.footer-col ul li a:hover{color:var(--red);}
+.footer-col p{font-size:12px;color:var(--muted);line-height:1.7;}
+.footer-col a.flink{font-size:12px;color:var(--blue);display:block;margin-bottom:3px;}
+.footer-col a.flink:hover{color:var(--red);}
+
+/* ── REAL SOCIAL ICONS ── */
+.footer-social{display:flex;gap:10px;margin-top:14px;}
+.footer-social a{width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:transform 0.22s ease,opacity 0.22s ease;flex-shrink:0;}
+.footer-social a:hover{transform:scale(1.15) translateY(-2px);}
+.footer-social a svg{width:18px;height:18px;fill:#fff;display:block;}
+.social-instagram{background:radial-gradient(circle at 30% 107%,#fdf497 0%,#fdf497 5%,#fd5949 45%,#d6249f 60%,#285AEB 90%);}
+.social-facebook{background:#1877F2;}
+.social-linkedin{background:#0A66C2;}
+
+.footer-bar{border-top:1px solid #ccc;padding:14px 0;text-align:center;font-size:11px;color:var(--muted);}
+
+/* RESPONSIVE */
+@media(max-width:1100px){
+  .staff-grid{grid-template-columns:repeat(3,1fr);}
+  .staff-grid.row2{grid-template-columns:repeat(3,1fr);}
+}
+@media(max-width:768px){
+  #navbar{padding:0 16px;}
+  .nav-links{display:none;}
+  .hamburger{display:flex;}
+  .page-hero{height:280px;}
+  .staff-section{padding:32px 20px;}
+  .staff-grid,.staff-grid.row2{grid-template-columns:repeat(2,1fr);}
+  .principal-section{grid-template-columns:1fr;}
+  .principal-text{padding:32px 20px;}
+  .footer-top{grid-template-columns:1fr;}
+  .footer-brand,.footer-touch{padding:24px 20px;}
+  footer{padding:20px 20px 0;}
+  .footer-grid{grid-template-columns:1fr 1fr;}
+  .mgmt-heading{padding:36px 20px 28px;}
+}
+@media(max-width:480px){
+  .staff-grid,.staff-grid.row2{grid-template-columns:1fr 1fr;}
+  .footer-grid{grid-template-columns:1fr;}
+  .footer-form{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav id="navbar">
+  <a href="/" class="nav-logo">
+    <img class="nav-logo-img" src="../assets/images/logo.png" alt="Logo" onload="this.classList.add('loaded')">
+    <div class="nav-logo-circle"><span>SES</span><small>RENAPUR</small></div>
+    <div class="nav-logo-text">
+      <strong>Saksham English School</strong>
+      <small>Renapur, Latur — State Board</small>
+    </div>
+  </a>
+  <div class="nav-links">
+    <a href="/">Home</a>
+    <a href="/gallery">Gallery</a>
+    <a href="/management" class="active">Management</a>
+    <a href="/apply-and-enroll">Apply &amp; Enroll</a>
+    <a href="/campus-life">Campus Life</a>
+    <a href="/why-us">Why us</a>
+    <a href="/contact">Contact</a>
+  </div>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="/">Home</a>
+  <a href="/gallery">Gallery</a>
+  <a href="/management">Management</a>
+  <a href="/apply-and-enroll">Apply &amp; Enroll</a>
+  <a href="/campus-life">Campus Life</a>
+  <a href="/why-us">Why us</a>
+  <a href="/contact">Contact</a>
+</div>
+
+<!-- HERO BANNER -->
+<div class="page-hero">
+  <img src="../assets/images/management-banner.jpg" alt="Management"
+    onerror="this.style.display='none';document.querySelector('.page-hero-fallback').style.display='block'">
+  <div class="page-hero-fallback"></div>
+  <div class="page-hero-text"><h1>Management Staff</h1></div>
+</div>
+
+<!-- MANAGEMENT HEADING -->
+<div class="mgmt-heading">
+  <h2>Management</h2>
+  <div class="underline"></div>
+  <p>At Saksham English School, we take pride in our dynamic and experienced management team, committed to providing a nurturing and enriching learning environment. Get to know the faces behind our school's success and leadership.</p>
+</div>
+
+<!-- STAFF CARDS -->
+<section class="staff-section">
+  <div class="staff-grid">
+    <div class="staff-card">
+      <div class="staff-photo">
+        <img src="../assets/images/management/chairman.jpg" alt="Chairman" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="staff-photo-placeholder" style="display:none;"><svg viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg></div>
+      </div>
+      <div class="staff-info">
+        <div class="staff-role">Chairman</div>
+        <div class="staff-name">[ Chairman Name ]</div>
+        <div class="staff-desc">Guided by a vision, led with dedication — our Chairman shapes the future with unwavering commitment to excellence in education.</div>
+      </div>
+    </div>
+    <div class="staff-card">
+      <div class="staff-photo">
+        <img src="../assets/images/management/ceo.jpg" alt="CEO" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="staff-photo-placeholder" style="display:none;"><svg viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg></div>
+      </div>
+      <div class="staff-info">
+        <div class="staff-role">CEO / Director</div>
+        <div class="staff-name">[ Director Name ]</div>
+        <div class="staff-desc">With visionary leadership and unwavering dedication, our Director champions excellence in education at Saksham English School.</div>
+      </div>
+    </div>
+    <div class="staff-card">
+      <div class="staff-photo">
+        <img src="../assets/images/management/trustee.jpg" alt="Managing Trustee" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="staff-photo-placeholder" style="display:none;"><svg viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg></div>
+      </div>
+      <div class="staff-info">
+        <div class="staff-role">Managing Trustee</div>
+        <div class="staff-name">[ Trustee Name ]</div>
+        <div class="staff-desc">As the guiding force behind our educational journey, our Managing Trustee exemplifies unwavering dedication to shaping bright futures.</div>
+      </div>
+    </div>
+    <div class="staff-card">
+      <div class="staff-photo">
+        <img src="../assets/images/management/trustee2.jpg" alt="Trustee" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="staff-photo-placeholder" style="display:none;"><svg viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg></div>
+      </div>
+      <div class="staff-info">
+        <div class="staff-role">Trustee</div>
+        <div class="staff-name">[ Trustee Name ]</div>
+        <div class="staff-desc">As the guiding force behind our educational journey, our Trustee exemplifies unwavering dedication to shaping bright futures.</div>
+      </div>
+    </div>
+    <div class="staff-card">
+      <div class="staff-photo">
+        <img src="../assets/images/management/trustee3.jpg" alt="Trustee" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="staff-photo-placeholder" style="display:none;"><svg viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg></div>
+      </div>
+      <div class="staff-info">
+        <div class="staff-role">Trustee</div>
+        <div class="staff-name">[ Trustee Name ]</div>
+        <div class="staff-desc">As the guiding force behind our educational journey, our Trustee exemplifies unwavering dedication to shaping bright futures.</div>
+      </div>
+    </div>
+  </div>
+  <div class="staff-grid row2" style="grid-template-columns:repeat(5,1fr);">
+    <div class="staff-card">
+      <div class="staff-photo">
+        <img src="../assets/images/management/principal.jpg" alt="Principal" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+        <div class="staff-photo-placeholder" style="display:none;"><svg viewBox="0 0 24 24"><path d="M12 12c2.7 0 4.8-2.1 4.8-4.8S14.7 2.4 12 2.4 7.2 4.5 7.2 7.2 9.3 12 12 12zm0 2.4c-3.2 0-9.6 1.6-9.6 4.8v2.4h19.2v-2.4c0-3.2-6.4-4.8-9.6-4.8z"/></svg></div>
+      </div>
+      <div class="staff-info">
+        <div class="staff-role">Principal</div>
+        <div class="staff-name">[ Principal Name ]</div>
+        <div class="staff-desc">Leading with passion and dedication, our Principal inspires a culture of learning and growth at Saksham English School.</div>
+      </div>
+    </div>
+    <div></div><div></div><div></div><div></div>
+  </div>
+</section>
+
+<!-- PRINCIPAL MESSAGE -->
+<section class="principal-section">
+  <div class="principal-text">
+    <h2>Principal's Message</h2>
+    <blockquote>Education is not only to create an environment which helps students learn but also inspires them to recognise and explore their own potential.</blockquote>
+    <p>Our school is a symbol of progressive and quality education. We aim at overall development of students, i.e. development in all the five domains — Physical, Mental, Emotional, Social and Moral. We strive to provide a learning conducive environment which enables children to self enquire and explore their latent talent and bloom to their fullest potential.</p>
+    <p>Believing in harmonious growth of children we put equal emphasis on academics, sports, life skills and values. We impart technologically embedded education and constantly work on pedagogical practices. Children get ample exposure to smart classroom teaching besides conventional classroom teaching.</p>
+    <p>In addition to academics, sports and other co-curricular activities are regularly organised. We motivate all children to participate in a plethora of activities ranging from literary activities, dance, drama, variety of sports events. Our school is scaling new heights with excellent professionals training our students in co-curricular activities like Football, Basketball, Cricket and many more indoor and outdoor games.</p>
+    <p>With an objective to boost mass participation and provide an opportunity to each and every child, thematic class assemblies are organised for all classes spread throughout the session. The school has also formed various clubs to strengthen child's academics and other performances.</p>
+    <p>Most importantly at school we are a team of dedicated teachers and staff committed to the welfare of students in our care. For us teaching is a passion and a calling. The importance of instilling good values in our students is our prime objective. We want our students to have fond memories of their time spent with us.</p>
+    <div class="principal-sign">
+      <strong>[ Principal Name ]</strong>
+      <span>M.A. B.Ed. — Principal, Saksham English School</span>
+    </div>
+  </div>
+  <div class="principal-photo">
+    <img src="../assets/images/management/principal.jpg" alt="Principal" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'">
+    <div class="principal-photo-placeholder" style="display:none;"><span>Principal Photo</span></div>
+  </div>
+</section>
+
+<!-- FOOTER TOP -->
+<div class="footer-top">
+  <div class="footer-brand">
+    <div class="footer-logo-wrap">
+      <div class="footer-logo-circle"><span>SES</span><small>RNP</small></div>
+      <div>
+        <div class="footer-brand-name">Saksham English School</div>
+        <div class="footer-brand-sub">Renapur, Latur</div>
+      </div>
+    </div>
+    <p class="footer-tagline">Education is not only to create an environment which helps students learn but also inspires them to recognise and explore their own potential.</p>
+  </div>
+  <div class="footer-touch">
+    <h4>Get in Touch</h4>
+    <div class="footer-form">
+      <input type="text" placeholder="First Name">
+      <input type="text" placeholder="Last Name">
+      <input type="email" placeholder="Email">
+      <input type="tel" placeholder="Phone">
+      <div class="send-row"><button onclick="sendForm()">Send</button></div>
+    </div>
+    <div class="form-ok" id="formOk">Thank you! We will get back to you soon.</div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-col">
+      <h5>Quick Links</h5>
+      <ul>
+        <li><a href="../assets/docs/academic-calendar.pdf" target="_blank">Academic Calendar</a></li>
+        <li><a href="../assets/docs/fee-structure.pdf" target="_blank">Fee Structure 2025-26</a></li>
+        <li><a href="../assets/docs/affiliation.pdf" target="_blank">School Affiliation Letter</a></li>
+        <li><a href="../assets/docs/teacher-details.pdf" target="_blank">Teacher Details</a></li>
+        <li><a href="../assets/docs/result.pdf" target="_blank">3 Years Result</a></li>
+        <li><a href="../assets/docs/building-safety.pdf" target="_blank">Building Safety Certificate</a></li>
+        <li><a href="../assets/docs/pta.pdf" target="_blank">PTA</a></li>
+        <li><a href="../assets/docs/noc.pdf" target="_blank">State Board NOC</a></li>
+        <li><a href="../assets/docs/recognition.pdf" target="_blank">Recognition Certificate</a></li>
+        <li><a href="../assets/docs/balance-sheet.pdf" target="_blank">Balance Sheet</a></li>
+        <li><a href="../assets/docs/income-expenditure.pdf" target="_blank">Income &amp; Expenditure</a></li>
+        <li><a href="../assets/docs/student-list.pdf" target="_blank">Student Name List</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>More Documents</h5>
+      <ul>
+        <li><a href="../assets/docs/land-certificate.pdf" target="_blank">Certificate of Land</a></li>
+        <li><a href="../assets/docs/self-certificate.pdf" target="_blank">Self Certificate of SES</a></li>
+        <li><a href="../assets/docs/admin-staff.pdf" target="_blank">Admin Staff Details</a></li>
+        <li><a href="../assets/docs/fire-safety.pdf" target="_blank">Fire Safety Certificate</a></li>
+        <li><a href="../assets/docs/smc.pdf" target="_blank">SMC Committee</a></li>
+        <li><a href="../assets/docs/registration.pdf" target="_blank">Registration of Society</a></li>
+        <li><a href="../assets/docs/non-proprietary.pdf" target="_blank">Non-Proprietary Certificate</a></li>
+        <li><a href="../assets/docs/doctors-panel.pdf" target="_blank">Doctors Panel</a></li>
+        <li><a href="../assets/docs/drinking-sanitary.pdf" target="_blank">Drinking &amp; Sanitary Certificate</a></li>
+        <li><a href="../assets/docs/lease.pdf" target="_blank">Lease Agreement</a></li>
+        <li><a href="../assets/docs/trustee-list.pdf" target="_blank">List of Trustees</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h5>Registration Office</h5>
+      <p>
+        <a href="mailto:sakshamschoolrenapur@gmail.com" class="flink">sakshamschoolrenapur@gmail.com</a>
+        Tel: +91 [ Contact Number ]<br><br>
+        Rupchand Nagar, Renapur,<br>Maharashtra 413527<br>
+        Beside Renapur Bus Stand
+      </p>
+      <!-- REAL SOCIAL ICONS -->
+      <div class="footer-social">
+        <a href="https://www.instagram.com/" target="_blank" class="social-instagram" title="Instagram">
+          <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        </a>
+        <a href="https://www.facebook.com/" target="_blank" class="social-facebook" title="Facebook">
+          <svg viewBox="0 0 24 24"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+        </a>
+        <a href="https://www.linkedin.com/" target="_blank" class="social-linkedin" title="LinkedIn">
+          <svg viewBox="0 0 24 24"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+        </a>
+      </div>
+    </div>
+    <div class="footer-col">
+      <h5>School Hours</h5>
+      <p>Mon, Fri, Sat: 9:00 AM – 4:00 PM<br><br>Tue, Wed, Thu, Sun: Closed</p>
+      <br>
+      <h5>Navigate</h5>
+      <ul>
+        <li><a href="/">Home</a></li>
+        <li><a href="/gallery">Gallery</a></li>
+        <li><a href="/apply-and-enroll">Apply &amp; Enroll</a></li>
+        <li><a href="/campus-life">Campus Life</a></li>
+        <li><a href="/why-us">Why Us</a></li>
+        <li><a href="/contact">Contact</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bar">
+    Rupchand Nagar, Beside Renapur Bus Stand, Renapur, Dist. Latur, MH-413527 &nbsp;|&nbsp; &copy; 2025 By Saksham English School
+  </div>
+</footer>
+
+<script>
+function toggleMenu(){document.getElementById('mobileMenu').classList.toggle('open');}
+window.addEventListener('click',function(e){
+  if(!e.target.closest('#navbar')&&!e.target.closest('#mobileMenu')){document.getElementById('mobileMenu').classList.remove('open');}
+});
+function sendForm(){
+  const el=document.getElementById('formOk');
+  el.style.display='block';
+  setTimeout(()=>{el.style.display='none';},5000);
+}
+</script>
+</body>
+</html>
