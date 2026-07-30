@@ -291,3 +291,22 @@ select:focus {
 .campus-card:hover .campus-card-photo img {
   transform: scale(1.06) !important;
 }
+/* ===== GLOBAL IMAGE POLISH ===== */
+.vision-img, .event-photo, .about-photo,
+.staff-photo, .principal-photo, .campus-card-photo,
+.banner-img, .masonry-item {
+  border-radius: 14px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.10);
+  transition: box-shadow 0.3s ease, transform 0.3s ease;
+}
+.campus-card-photo:hover, .staff-card:hover .staff-photo,
+.masonry-item:hover, .banner-img:hover {
+  box-shadow: 0 12px 28px rgba(0,0,0,0.16);
+  transform: translateY(-3px);
+}
+.page-hero img { border-radius: 0; }
+
+@media (max-width: 640px) {
+  .vision-img, .event-photo, .about-photo,
+  .staff-photo, .campus-card-photo { border-radius: 10px; }
+}
