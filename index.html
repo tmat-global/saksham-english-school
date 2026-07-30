@@ -555,15 +555,35 @@ function sendForm(){
   .staff-photo, .campus-card-photo { border-radius: 10px; }
 }
 
-/* ===== TOP BAR + ADMISSION BADGE ===== */
-.top-bar{background:var(--navy);color:#fff;font-size:12px;padding:8px 24px;display:flex;justify-content:center;flex-wrap:wrap;gap:6px 24px;text-align:center;}
+/* ===== TOP BAR + ADMISSION BADGE (v2 - fixed layering) ===== */
+.top-bar{
+  display:none;
+  position:fixed;top:0;left:0;right:0;z-index:1001;
+  background:var(--navy);color:#fff;font-size:12px;
+  height:38px;align-items:center;justify-content:center;
+  gap:24px;padding:0 24px;white-space:nowrap;overflow:hidden;
+}
 .top-bar a{color:#fff;text-decoration:none;}
-.admission-badge{background:var(--red);color:#fff;font-size:13px;font-weight:600;padding:8px 16px;border-radius:20px;text-decoration:none;white-space:nowrap;animation:pulse-badge 2s infinite;margin-left:12px;}
-@keyframes pulse-badge{0%{box-shadow:0 0 0 0 rgba(220,53,69,0.5);}70%{box-shadow:0 0 0 10px rgba(220,53,69,0);}100%{box-shadow:0 0 0 0 rgba(220,53,69,0);}}
+.admission-badge{
+  background:linear-gradient(135deg,#dc3545,#ff6b6b);
+  color:#fff;font-size:14px;font-weight:700;
+  padding:10px 20px;border-radius:24px;text-decoration:none;
+  white-space:nowrap;letter-spacing:0.3px;margin-left:12px;
+  box-shadow:0 4px 14px rgba(220,53,69,0.4);
+  animation:badge-glow 1.6s ease-in-out infinite;
+  display:inline-block;
+}
+@keyframes badge-glow{
+  0%,100%{transform:scale(1);box-shadow:0 4px 14px rgba(220,53,69,0.4);}
+  50%{transform:scale(1.07);box-shadow:0 6px 24px rgba(220,53,69,0.7);}
+}
+@media(min-width:769px){
+  .top-bar{display:flex;}
+  #navbar{top:38px;}
+  body{padding-top:38px;}
+}
 @media(max-width:768px){
-  .top-bar{font-size:11px;padding:6px 12px;gap:4px 14px;}
   .admission-badge{font-size:11px;padding:6px 12px;margin-left:0;}
 }
-@media(max-width:480px){.top-bar span{width:100%;}}
 </style></body>
 </html>
