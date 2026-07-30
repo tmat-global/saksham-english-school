@@ -1,14 +1,32 @@
 import os
 import re
 
-lenis_snippet = """
-<!-- Lenis Smooth Scroll Fix -->
+lenis_block = """
+<!-- Lenis Smooth Scroll Setup -->
+<style>
+  html.lenis, html.lenis body {
+    height: auto;
+  }
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+  .lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+  }
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+  .lenis.lenis-scrolling iframe {
+    pointer-events: none;
+  }
+</style>
 <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
 <script>
   const lenis = new Lenis({
-    duration: 1.2,
-    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-    smoothTouch: false
+    lerp: 0.1,
+    wheelMultiplier: 1.0,
+    smoothTouch: false,
+    infinite: false,
   });
   function raf(time) {
     lenis.raf(time);
@@ -25,41 +43,21 @@ def process_file(filepath):
     original_content = content
     changes_made = []
 
-    # Determine depth relative to root (saksham-english-school)
-    rel_path = os.path.relpath(filepath, '.')
-    depth = rel_path.count(os.sep)
-    prefix = "../" * depth if depth > 0 else ""
+    # Strip any previous messy or partial lenis scripts/styles to start clean
+    content = re.sub(r'<!--\s*Lenis.*?\s*-->.*?</script>', '', content, flags=re.DOTALL | re.IGNORECASE)
+    content = re.sub(r'<script src="[^"]*lenis[^"]*"></script>\s*<script>.*?</script>', '', content, flags=re.DOTALL | re.IGNORECASE)
 
-    # 1. Clean up any existing Lenis script variations first to avoid duplication/conflicts
-    content = re.sub(r'<!--\s*(?:Lenis.*?)?-->\s*<script src="[^"]*lenis[^"]*"></script>\s*<script>.*?</script>', '', content, flags=re.DOTALL | re.IGNORECASE)
-
-    # Add the robust Lenis snippet right before </body>
+    # Insert the complete Lenis block right before </body>
     if "</body>" in content:
-        content = content.replace("</body>", lenis_snippet)
-        changes_made.append("Updated Lenis Smooth Scroll Configuration")
-
-    # 2. Update Footer Links specifically inside "QUICK LINKS" and "MORE DOCUMENTS" sections
-    def replace_links_in_section(match):
-        header_tag = match.group(1)
-        ul_content = match.group(2)
-        # Rewrite every href inside this ul list to point to index.html with correct relative path
-        updated_ul = re.sub(r'href="[^"]*?"', f'href="{prefix}index.html"', ul_content)
-        return header_tag + updated_ul
-
-    # Match h2/h3/h4/h5 containing QUICK LINKS or MORE DOCUMENTS followed by a list
-    pattern = re.compile(r'(<(?:h[2-5])[^>]*>\s*(?:QUICK LINKS|MORE DOCUMENTS)\s*</(?:h[2-5])>)\s*(<ul[^>]*>.*?</ul>)', re.DOTALL | re.IGNORECASE)
-    
-    new_content = pattern.sub(replace_links_in_section, content)
-    if new_content != content:
-        content = new_content
-        changes_made.append(f"Redirected Quick Links & More Documents to {prefix}index.html")
+        content = content.replace("</body>", lenis_block)
+        changes_made.append("Injected optimized Lenis Smooth Scroll CSS & JS configuration")
 
     if content != original_content:
         with open(filepath, 'w', encoding='utf-8') as f:
             f.write(content)
         print(f"[UPDATED] {filepath} -> {', '.join(changes_made)}")
     else:
-        print(f"[SKIPPED] {filepath} -> No changes needed.")
+        print(f"[SKIPPED] {filepath}")
 
 def main():
     for root, dirs, files in os.walk('.'):
