@@ -322,36 +322,34 @@ footer{background:#E8EDF2;padding:32px 40px 0;}
 <footer>
   <div class="footer-grid">
     <div class="footer-col">
-      <h5>Quick Links</h5>
-      <ul>
-        <li><a href="../assets/docs/academic-calendar.pdf" target="_blank">Academic Calendar</a></li>
-        <li><a href="../assets/docs/fee-structure.pdf" target="_blank">Fee Structure 2025-26</a></li>
-        <li><a href="../assets/docs/affiliation.pdf" target="_blank">School Affiliation Letter</a></li>
-        <li><a href="../assets/docs/teacher-details.pdf" target="_blank">Teacher Details</a></li>
-        <li><a href="../assets/docs/result.pdf" target="_blank">3 Years Result</a></li>
-        <li><a href="../assets/docs/building-safety.pdf" target="_blank">Building Safety Certificate</a></li>
-        <li><a href="../assets/docs/pta.pdf" target="_blank">PTA</a></li>
-        <li><a href="../assets/docs/noc.pdf" target="_blank">State Board NOC</a></li>
-        <li><a href="../assets/docs/recognition.pdf" target="_blank">Recognition Certificate</a></li>
-        <li><a href="../assets/docs/balance-sheet.pdf" target="_blank">Balance Sheet</a></li>
-        <li><a href="../assets/docs/income-expenditure.pdf" target="_blank">Income &amp; Expenditure</a></li>
-        <li><a href="../assets/docs/student-list.pdf" target="_blank">Student Name List</a></li>
+      <h5>Quick Links</h5><ul>
+        <li><a href="../index.html" target="_blank">Academic Calendar</a></li>
+        <li><a href="../index.html" target="_blank">Fee Structure 2025-26</a></li>
+        <li><a href="../index.html" target="_blank">School Affiliation Letter</a></li>
+        <li><a href="../index.html" target="_blank">Teacher Details</a></li>
+        <li><a href="../index.html" target="_blank">3 Years Result</a></li>
+        <li><a href="../index.html" target="_blank">Building Safety Certificate</a></li>
+        <li><a href="../index.html" target="_blank">PTA</a></li>
+        <li><a href="../index.html" target="_blank">State Board NOC</a></li>
+        <li><a href="../index.html" target="_blank">Recognition Certificate</a></li>
+        <li><a href="../index.html" target="_blank">Balance Sheet</a></li>
+        <li><a href="../index.html" target="_blank">Income &amp; Expenditure</a></li>
+        <li><a href="../index.html" target="_blank">Student Name List</a></li>
       </ul>
     </div>
     <div class="footer-col">
-      <h5>More Documents</h5>
-      <ul>
-        <li><a href="../assets/docs/land-certificate.pdf" target="_blank">Certificate of Land</a></li>
-        <li><a href="../assets/docs/self-certificate.pdf" target="_blank">Self Certificate of SES</a></li>
-        <li><a href="../assets/docs/admin-staff.pdf" target="_blank">Admin Staff Details</a></li>
-        <li><a href="../assets/docs/fire-safety.pdf" target="_blank">Fire Safety Certificate</a></li>
-        <li><a href="../assets/docs/smc.pdf" target="_blank">SMC Committee</a></li>
-        <li><a href="../assets/docs/registration.pdf" target="_blank">Registration of Society</a></li>
-        <li><a href="../assets/docs/non-proprietary.pdf" target="_blank">Non-Proprietary Certificate</a></li>
-        <li><a href="../assets/docs/doctors-panel.pdf" target="_blank">Doctors Panel</a></li>
-        <li><a href="../assets/docs/drinking-sanitary.pdf" target="_blank">Drinking &amp; Sanitary Certificate</a></li>
-        <li><a href="../assets/docs/lease.pdf" target="_blank">Lease Agreement</a></li>
-        <li><a href="../assets/docs/trustee-list.pdf" target="_blank">List of Trustees</a></li>
+      <h5>More Documents</h5><ul>
+        <li><a href="../index.html" target="_blank">Certificate of Land</a></li>
+        <li><a href="../index.html" target="_blank">Self Certificate of SES</a></li>
+        <li><a href="../index.html" target="_blank">Admin Staff Details</a></li>
+        <li><a href="../index.html" target="_blank">Fire Safety Certificate</a></li>
+        <li><a href="../index.html" target="_blank">SMC Committee</a></li>
+        <li><a href="../index.html" target="_blank">Registration of Society</a></li>
+        <li><a href="../index.html" target="_blank">Non-Proprietary Certificate</a></li>
+        <li><a href="../index.html" target="_blank">Doctors Panel</a></li>
+        <li><a href="../index.html" target="_blank">Drinking &amp; Sanitary Certificate</a></li>
+        <li><a href="../index.html" target="_blank">Lease Agreement</a></li>
+        <li><a href="../index.html" target="_blank">List of Trustees</a></li>
       </ul>
     </div>
     <div class="footer-col">
@@ -413,10 +411,16 @@ function sendForm(){
 }
 </script>
 
-<!-- Lenis Smooth Scroll -->
+
+
+<!-- Lenis Smooth Scroll Fix -->
 <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
 <script>
-  const lenis = new Lenis();
+  const lenis = new Lenis({
+    duration: 1.2,
+    easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+    smoothTouch: false
+  });
   function raf(time) {
     lenis.raf(time);
     requestAnimationFrame(raf);
