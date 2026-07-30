@@ -182,7 +182,7 @@ footer{background:#E8EDF2;padding:32px 40px 0;}
 
 <!-- NAVBAR -->
 <div class="top-bar">
-  <span>Rupchand Nagar, Renapur, Tq. Renapur, Dist: Latur, Maharashtra 413527 (Beside Renapur Bus Stand)</span>
+  <span>&#128205; Rupchand Nagar, Renapur, Tq. Renapur, Dist: Latur, Maharashtra 413527 (Beside Renapur Bus Stand)</span>
   <span>sakshamschoolrenapur@gmail.com</span>
   <span>Tel: +91 8551031810</span>
   <span>WhatsApp: <a href="https://wa.me/918551031810" target="_blank">+91 8551031810</a></span>
@@ -496,10 +496,11 @@ function sendForm(){
 .top-bar{
   display:none;
   position:fixed;top:0;left:0;right:0;z-index:1001;
-  background:var(--navy);color:#fff;font-size:12px;
-  height:38px;align-items:center;justify-content:center;
-  gap:24px;padding:0 24px;white-space:nowrap;overflow:hidden;
+  background:var(--navy);color:#fff;font-size:13px;font-weight:500;
+  letter-spacing:0.2px;align-items:center;justify-content:center;
+  flex-wrap:wrap;gap:6px 24px;padding:8px 24px;text-align:center;
 }
+.top-bar span:first-child{font-weight:600;}
 .top-bar a{color:#fff;text-decoration:none;}
 .admission-badge{
   background:linear-gradient(135deg,#dc3545,#ff6b6b);
@@ -516,11 +517,23 @@ function sendForm(){
 }
 @media(min-width:769px){
   .top-bar{display:flex;}
-  #navbar{top:38px;}
-  body{padding-top:38px;}
 }
 @media(max-width:768px){
   .admission-badge{font-size:11px;padding:6px 12px;margin-left:0;}
 }
-</style></body>
+</style>
+<script>
+function syncHeaderOffset(){
+  var topBar = document.querySelector('.top-bar');
+  var nav = document.getElementById('navbar');
+  if(!topBar || !nav) return;
+  var visible = window.getComputedStyle(topBar).display !== 'none';
+  var h = visible ? topBar.offsetHeight : 0;
+  nav.style.top = h + 'px';
+  document.body.style.paddingTop = h + 'px';
+}
+window.addEventListener('load', syncHeaderOffset);
+window.addEventListener('resize', syncHeaderOffset);
+</script>
+</body>
 </html>
