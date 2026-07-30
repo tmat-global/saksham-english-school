@@ -451,6 +451,21 @@ function sendForm(){
 
 
 
+
+
+
+
+
+
+
+
+
+
+<!-- Lenis Smooth Scroll -->
+
+
+
+<script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
 <script>
   const lenis = new Lenis({
     duration: 1.2,
@@ -463,32 +478,5 @@ function sendForm(){
   }
   requestAnimationFrame(raf);
 </script>
-
-
-<script>
-  const lenis = new Lenis({
-    lerp: 0.1,
-    wheelMultiplier: 1.0,
-    smoothTouch: false,
-    infinite: false,
-  });
-  function raf(time) {
-    lenis.raf(time);
-    requestAnimationFrame(raf);
-  }
-  requestAnimationFrame(raf);
-</script>
-
-</html>
-
-<!-- Lenis Smooth Scroll -->
-<script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
-<script>
-  const lenis = new Lenis();
-  function raf(time) {
-    lenis.raf(time);
-    requestAnimationFrame(raf);
-  }
-  requestAnimationFrame(raf);
-</script>
 </body>
+</html>
