@@ -1,33 +1,11 @@
 import os
 import re
 
-lenis_block = """
-<!-- Lenis Smooth Scroll Setup -->
-<style>
-  html.lenis, html.lenis body {
-    height: auto;
-  }
-  .lenis.lenis-smooth {
-    scroll-behavior: auto !important;
-  }
-  .lenis.lenis-smooth [data-lenis-prevent] {
-    overscroll-behavior: contain;
-  }
-  .lenis.lenis-stopped {
-    overflow: hidden;
-  }
-  .lenis.lenis-scrolling iframe {
-    pointer-events: none;
-  }
-</style>
+lenis_clean_script = """
+<!-- Lenis Smooth Scroll -->
 <script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
 <script>
-  const lenis = new Lenis({
-    lerp: 0.1,
-    wheelMultiplier: 1.0,
-    smoothTouch: false,
-    infinite: false,
-  });
+  const lenis = new Lenis();
   function raf(time) {
     lenis.raf(time);
     requestAnimationFrame(raf);
@@ -41,21 +19,28 @@ def process_file(filepath):
         content = f.read()
 
     original_content = content
-    changes_made = []
+    changes = []
 
-    # Strip any previous messy or partial lenis scripts/styles to start clean
+    # 1. Remove conflicting native CSS smooth scrolling
+    content = re.sub(r'html\s*\{\s*scroll-behavior\s*:\s*smooth\s*;?\s*\}', '', content, flags=re.IGNORECASE)
+    if content != original_content:
+        changes.append("Removed conflicting native scroll-behavior: smooth")
+
+    # 2. Clean up any previous multi-line Lenis blocks or styles
     content = re.sub(r'<!--\s*Lenis.*?\s*-->.*?</script>', '', content, flags=re.DOTALL | re.IGNORECASE)
-    content = re.sub(r'<script src="[^"]*lenis[^"]*"></script>\s*<script>.*?</script>', '', content, flags=re.DOTALL | re.IGNORECASE)
+    content = re.sub(r'<style>\s*html\.lenis[\s\S]*?</style>', '', content, flags=re.DOTALL | re.IGNORECASE)
 
-    # Insert the complete Lenis block right before </body>
+    # 3. Inject clean standard Lenis snippet before </body>
     if "</body>" in content:
-        content = content.replace("</body>", lenis_block)
-        changes_made.append("Injected optimized Lenis Smooth Scroll CSS & JS configuration")
+        # Remove any trailing </body> if we're replacing it cleanly
+        content = content.replace("</body>", "")
+        content = content.strip() + "\n" + lenis_clean_script
+        changes.append("Injected clean Lenis smooth scroll script")
 
     if content != original_content:
         with open(filepath, 'w', encoding='utf-8') as f:
             f.write(content)
-        print(f"[UPDATED] {filepath} -> {', '.join(changes_made)}")
+        print(f"[CLEANED & FIXED] {filepath} -> {', '.join(changes)}")
     else:
         print(f"[SKIPPED] {filepath}")
 

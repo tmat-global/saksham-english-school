@@ -13,7 +13,7 @@
   --teal:#1A6B6B;--teal2:#0D5C5C;
   --lightgray:#F2F2F2;--text:#222222;--muted:#555555;
 }
-html{scroll-behavior:smooth;}
+
 body{font-family:'Open Sans',sans-serif;background:var(--white);color:var(--text);overflow-x:hidden;}
 a{text-decoration:none;color:inherit;}
 img{max-width:100%;}
@@ -427,25 +427,7 @@ function sendForm(){
   requestAnimationFrame(raf);
 </script>
 
-<!-- Lenis Smooth Scroll Setup -->
-<style>
-  html.lenis, html.lenis body {
-    height: auto;
-  }
-  .lenis.lenis-smooth {
-    scroll-behavior: auto !important;
-  }
-  .lenis.lenis-smooth [data-lenis-prevent] {
-    overscroll-behavior: contain;
-  }
-  .lenis.lenis-stopped {
-    overflow: hidden;
-  }
-  .lenis.lenis-scrolling iframe {
-    pointer-events: none;
-  }
-</style>
-<script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+
 <script>
   const lenis = new Lenis({
     lerp: 0.1,
@@ -459,5 +441,17 @@ function sendForm(){
   }
   requestAnimationFrame(raf);
 </script>
-</body>
+
 </html>
+
+<!-- Lenis Smooth Scroll -->
+<script src="https://unpkg.com/lenis@1.1.13/dist/lenis.min.js"></script>
+<script>
+  const lenis = new Lenis();
+  function raf(time) {
+    lenis.raf(time);
+    requestAnimationFrame(raf);
+  }
+  requestAnimationFrame(raf);
+</script>
+</body>
