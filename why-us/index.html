@@ -554,5 +554,130 @@ function syncHeaderOffset(){
 window.addEventListener('load', syncHeaderOffset);
 window.addEventListener('resize', syncHeaderOffset);
 </script>
+<script>
+/* SES-FORM-SUBMIT */
+(function(){
+  var ENDPOINT = 'https://formsubmit.co/ajax/sakshamrenapur@gmail.com';
+
+  function findContainer(btn){
+    var el = btn.parentElement;
+    while(el && el !== document.body){
+      if(el.querySelector('input, select, textarea')) return el;
+      el = el.parentElement;
+    }
+    return null;
+  }
+
+  function collect(container){
+    var data = {}, used = {}, lastLabel = '', missing = false, badEmail = false, replyTo = '';
+    container.querySelectorAll('label, input, select, textarea').forEach(function(n){
+      if(n.tagName === 'LABEL'){ lastLabel = n.textContent.replace(/\s+/g,' ').trim(); return; }
+      var type = (n.type || '').toLowerCase();
+      if(type === 'hidden' || type === 'submit' || type === 'button') return;
+      var val;
+      if(n.tagName === 'SELECT'){
+        var opt = n.options[n.selectedIndex];
+        val = opt ? (opt.value || opt.text) : '';
+        if(/^select/i.test(val.trim())) val = '';
+      } else {
+        val = (n.value || '').trim();
+      }
+      var base = lastLabel.replace(/\*/g,'').trim() || n.placeholder || 'Field';
+      var key = base;
+      var ph = (n.placeholder || '').trim();
+      if(lastLabel && /^(first|last)$/i.test(ph)) key = base + ' (' + ph + ')';
+      if(data.hasOwnProperty(key)){ used[key] = (used[key] || 1) + 1; key = key + ' ' + used[key]; }
+      data[key] = val;
+      if(/\*/.test(lastLabel) && !val) missing = true;
+      if(type === 'email' && val){
+        if(!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(val)) badEmail = true;
+        replyTo = val;
+      }
+    });
+    return {data: data, missing: missing, badEmail: badEmail, replyTo: replyTo};
+  }
+
+  function findThanks(container){
+    var el = container;
+    for(var i = 0; i < 4 && el; i++){
+      var found = Array.prototype.find.call(el.querySelectorAll('div, p, span'), function(d){
+        return d.children.length === 0 && /^Thank you/i.test(d.textContent.trim());
+      });
+      if(found) return found;
+      el = el.parentElement;
+    }
+    return null;
+  }
+
+  function showSuccess(el){
+    if(!el) return;
+    el.style.display = 'block';
+    el.style.opacity = '1';
+    el.style.visibility = 'visible';
+    el.classList.add('show', 'visible', 'active');
+    setTimeout(function(){
+      el.style.display = 'none';
+      el.classList.remove('show', 'visible', 'active');
+    }, 8000);
+  }
+
+  function send(subject, getSuccess, extraCheck){
+    var e = window.event;
+    var btn = (e && e.target && e.target.closest) ? e.target.closest('button') : null;
+    if(!btn) return;
+    var container = findContainer(btn);
+    if(!container) return;
+    var r = collect(container);
+    if(r.missing || r.badEmail || (extraCheck && !extraCheck(r.data))){
+      alert('Please fill in the required fields with valid details.');
+      return;
+    }
+    var payload = Object.assign({
+      _subject: subject, _template: 'table', _captcha: 'false', Page: location.href
+    }, r.data);
+    if(r.replyTo) payload._replyto = r.replyTo;
+
+    var originalHTML = btn.innerHTML;
+    btn.disabled = true;
+    btn.textContent = 'Sending...';
+
+    fetch(ENDPOINT, {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json', 'Accept': 'application/json'},
+      body: JSON.stringify(payload)
+    })
+    .then(function(res){
+      return res.json().catch(function(){ return {}; }).then(function(d){ return {ok: res.ok, d: d}; });
+    })
+    .then(function(x){
+      var ok = x.ok && (x.d.success === true || x.d.success === 'true');
+      if(!ok){ console.error('Form send failed:', x.d); throw new Error('send failed'); }
+      container.querySelectorAll('input, textarea').forEach(function(i){ if(i.type !== 'hidden') i.value = ''; });
+      container.querySelectorAll('select').forEach(function(s){ s.selectedIndex = 0; });
+      showSuccess(getSuccess(container));
+    })
+    .catch(function(){
+      alert('Sorry, we could not send your message right now. Please call or WhatsApp +91 8551031810.');
+    })
+    .finally(function(){
+      btn.disabled = false;
+      btn.innerHTML = originalHTML;
+    });
+  }
+
+  window.submitContact = function(){
+    send('New Contact Enquiry - Saksham English School Website', findThanks);
+  };
+  window.submitApplication = function(){
+    send('New Admission Application - Saksham English School Website',
+         function(){ return document.getElementById('applySuccess'); });
+  };
+  window.sendForm = function(){
+    send('New Enquiry (Footer Form) - Saksham English School Website',
+         function(){ return document.getElementById('formOk'); },
+         function(d){ return d['First Name'] && (d['Email'] || d['Phone']); });
+  };
+})();
+</script>
 </body>
 </html>
